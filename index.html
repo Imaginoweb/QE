@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image dynamique personnalisée</title>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="300" style="border:1px solid #ccc;"></canvas>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const segment = urlParams.get("segment") || "Families";
+    const lang = urlParams.get("lang") || "en";
+
+    const translations = {
+      en: {
+        Families: "Welcome, Families!",
+        Luxury: "Exclusive for Luxury Travelers",
+        Business: "Tailored for Business Travelers"
+      },
+      fr: {
+        Families: "Bienvenue aux familles !",
+        Luxury: "Offre exclusive pour voyageurs de luxe",
+        Business: "Pensé pour les voyageurs d'affaires"
+      },
+      es: {
+        Families: "¡Bienvenidas las familias!",
+        Luxury: "Exclusivo para viajeros de lujo",
+        Business: "Diseñado para viajeros de negocios"
+      }
+    };
+
+    const bgImages = {
+      Families: "https://imostripo.blob.core.windows.net/ac90110b5f984bcca8704d4591edc0df/lib/pluginId_ac90110b5f984bcca8704d4591edc0df_712e091d-f4d3-42b9-bdbd-c96f47084786/famille_moyenne.jpeg",
+      Luxury: "https://imostripo.blob.core.windows.net/ac90110b5f984bcca8704d4591edc0df/lib/pluginId_ac90110b5f984bcca8704d4591edc0df_712e091d-f4d3-42b9-bdbd-c96f47084786/luxe.jpg",
+      Business: "https://imostripo.blob.core.windows.net/ac90110b5f984bcca8704d4591edc0df/lib/pluginId_ac90110b5f984bcca8704d4591edc0df_712e091d-f4d3-42b9-bdbd-c96f47084786/business.jpg"
+    };
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // important pour les images en HTTPS externes
+    img.src = bgImages[segment] || bgImages["Families"];
+
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Overlay semi-transparent
+      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+      ctx.fillRect(0, 220, canvas.width, 80);
+
+      // Texte traduit
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 22px Arial";
+      ctx.fillText(translations[lang][segment] || "Welcome!", 20, 260);
+    };
+  </script>
+</body>
+</html>
